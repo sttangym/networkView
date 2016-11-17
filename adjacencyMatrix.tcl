@@ -721,6 +721,8 @@ proc ::AdjacencyMatrix::getAdjacencyMatrixUsage {} {
 	puts "    paramFileName: parameter file of the form:"
 	puts "      >Psf"
 	puts "      >Dcds"
+	puts "      >Cutoff”
+	puts "      >Occupancy”
 	puts "      >SystemSelection"
 	puts "      >NodeSelection"
 	puts "      >Clusters"

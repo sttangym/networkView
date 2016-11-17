@@ -318,11 +318,21 @@ proc networkSetup {paramFileName} {
     set systemSelString ""
     set nodeSelString ""
     set selString ""
+
+    set myDistanceCutoff 4.5
+    set myRequiredOccupancy 0.75
     
     set line [gets $paramFile]
     while {![eof $paramFile]} {
        if {[regexp {>Psf} $line]} {
            set psfFileName [string trim [getParameterLine $paramFile]]
+
+       } elseif {[regexp {>Cutoff} $line]} {
+           set myDistanceCutoff [string trim [getParameterLine $paramFile]]
+
+       } elseif {[regexp {>Occupancy} $line]} {
+           set myRequiredOccupancy [string trim [getParameterLine $paramFile]]
+
        } elseif {[regexp {>Pdb} $line]} {
            set pdbFileName [string trim [getParameterLine $paramFile]]
        } elseif {[regexp {>Dcds} $line]} {
@@ -378,7 +388,7 @@ proc networkSetup {paramFileName} {
        runCarma $carmaDcdFileName $carmaPsfFileName
        prepTrajectoryFiles $dcdFileNames $systemSelString $adjmatDcdFileName $adjmatPsfFileName $adjmatIndexFileName 10
        loadTrajectoryFiles $adjmatDcdFileName $adjmatPsfFileName
-       getAdjacencyMatrix top $paramFileName "contact" "carma.fitted.dcd.varcov.dat"
+       getAdjacencyMatrix top $paramFileName "contact" "carma.fitted.dcd.varcov.dat" $myDistanceCutoff $myRequiredOccupancy
        return
     }
 
